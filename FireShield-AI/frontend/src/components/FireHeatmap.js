@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const FireHeatmap = ({ fireData, userLocation, safePlaces }) => {
+const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -9,7 +9,7 @@ const FireHeatmap = ({ fireData, userLocation, safePlaces }) => {
       return;
     }
 
-    // Center the map on the user's location if available; otherwise, default to a center over Canada.
+    // Center the map on the effective user location if available; otherwise, default to a center over Canada.
     const center = userLocation
       ? { lat: userLocation.latitude, lng: userLocation.longitude }
       : { lat: 56, lng: -100 };
@@ -19,7 +19,7 @@ const FireHeatmap = ({ fireData, userLocation, safePlaces }) => {
       zoom: 6,
     });
 
-    // Add a marker for the user's location if available.
+    // Add a marker for the effective user location.
     if (userLocation) {
       new window.google.maps.Marker({
         position: { lat: userLocation.latitude, lng: userLocation.longitude },
@@ -29,7 +29,7 @@ const FireHeatmap = ({ fireData, userLocation, safePlaces }) => {
       });
     }
 
-    // Convert fireData into an array of LatLng objects with weights for the heatmap.
+    // Create a heatmap layer using fire data.
     const heatmapData = fireData.map((fire) => ({
       location: new window.google.maps.LatLng(
         parseFloat(fire.latitude),
@@ -44,18 +44,19 @@ const FireHeatmap = ({ fireData, userLocation, safePlaces }) => {
     });
     heatmap.setMap(map);
 
-    // Display safe places as markers using a green marker icon.
-    if (safePlaces && safePlaces.length > 0) {
-      safePlaces.forEach((place) => {
-        new window.google.maps.Marker({
-          position: { lat: place.latitude, lng: place.longitude },
-          map: map,
-          title: place.name,
-          icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-        });
+    // Add a marker for the suggested safe location.
+    if (suggestedSafeLocation) {
+      new window.google.maps.Marker({
+        position: {
+          lat: suggestedSafeLocation.latitude,
+          lng: suggestedSafeLocation.longitude,
+        },
+        map: map,
+        title: 'Suggested Safe Location',
+        icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
       });
     }
-  }, [fireData, userLocation, safePlaces]);
+  }, [fireData, userLocation, suggestedSafeLocation]);
 
   return <div ref={mapRef} style={{ height: '500px', width: '100%' }} />;
 };
