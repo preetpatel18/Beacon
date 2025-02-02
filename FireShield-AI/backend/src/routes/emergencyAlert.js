@@ -4,9 +4,7 @@ const router = express.Router();
 const twilio = require('twilio');
 
 // Directly assign Twilio credentials (for testing only; not recommended for production)
-const accountSid = 'ACcbc27a24efc542c9f0c9211294ed9571';  // Your Account SID
-const authToken = 'b97abc7fd9d52d8cf20b2755eb311f49';       // Your Auth Token
-const fromNumber = '+17326199750';                           // Your Twilio phone number
+                         // Your Twilio phone number
 
 // Initialize the Twilio client.
 const client = twilio(accountSid, authToken);
