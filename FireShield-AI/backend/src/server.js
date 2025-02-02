@@ -11,8 +11,8 @@ const nasaFirmsRoutes = require('./routes/nasaFirms');
 app.use('/api/nasa-firms', nasaFirmsRoutes);
 
 // Mount the emergency alert route.
-const emergencyAlertRoutes = require('./routes/emergencyAlert');
-app.use('/api/emergency-alert', emergencyAlertRoutes);
+// const emergencyAlertRoutes = require('./routes/emergencyAlert');
+// app.use('/api/emergency-alert', emergencyAlertRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
