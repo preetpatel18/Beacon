@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { LoadScript } from '@react-google-maps/api';
 import FireHeatmap from './components/FireHeatmap';
+import EmergencyButton from './EmergencyButton';
+import './App.css';
 
 // Haversine formula: calculates the distance (in km) between two lat/lng points.
 function haversineDistance(lat1, lon1, lat2, lon2) {
@@ -60,7 +62,7 @@ function App() {
   // 2. Fetch NASA FIRMS data from the backend.
   const fetchFireData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/nasa-firms');
+      const response = await axios.get('http://localhost:5001/api/nasa-firms');
       // Ensure we always set fireData to an array.
       setFireData(response.data.data || []);
     } catch (error) {
@@ -181,6 +183,7 @@ function App() {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1>FireShield AI - Fire Risk Heatmap</h1>
+      <EmergencyButton status={riskCategory} />
       {userLocation ? (
         <p>
           Your Location:{' '}
@@ -222,7 +225,7 @@ function App() {
         </div>
       )}
       <LoadScript
-        googleMapsApiKey="YOUR_API_KEY"  // Replace with your actual API key.
+        googleMapsApiKey="AIzaSyD7yhyKbAtYlE_1GLPyYKG4FkvqbiTKlPY"  // Replace with your actual API key.
         libraries={libraries}
       >
         <FireHeatmap fireData={fireData} userLocation={userLocation} safePlaces={safePlaces} />

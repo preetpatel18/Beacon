@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.emergency-button {
+  background-color: #dc3545;
+}
+
+.emergency-button:hover {
+  background-color: #c82333;
+}
