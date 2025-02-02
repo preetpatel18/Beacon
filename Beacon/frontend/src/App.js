@@ -243,7 +243,7 @@ function App() {
   
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>FireShield AI - Fire Risk Heatmap</h1>
+      <h1>Beacon AI</h1>
       {effectiveUserLocation ? (
         <p>
           Your Location:{' '}
