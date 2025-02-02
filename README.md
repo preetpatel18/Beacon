@@ -1,6 +1,6 @@
 # BEACON
 
-**Group 2 - HackRU Spring - 2024**
+**Group 2 - HackRU Spring - 2025**
 
 ## Team Members
 - Nithik Pandya
