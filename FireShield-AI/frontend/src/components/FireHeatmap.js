@@ -9,7 +9,6 @@ const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation }) => {
       return;
     }
 
-    // Center the map on the effective user location if available; otherwise, default to a center over Canada.
     const center = userLocation
       ? { lat: userLocation.latitude, lng: userLocation.longitude }
       : { lat: 56, lng: -100 };
@@ -19,7 +18,6 @@ const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation }) => {
       zoom: 6,
     });
 
-    // Add a marker for the effective user location.
     if (userLocation) {
       new window.google.maps.Marker({
         position: { lat: userLocation.latitude, lng: userLocation.longitude },
@@ -29,7 +27,6 @@ const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation }) => {
       });
     }
 
-    // Create a heatmap layer using fire data.
     const heatmapData = fireData.map((fire) => ({
       location: new window.google.maps.LatLng(
         parseFloat(fire.latitude),
@@ -44,7 +41,6 @@ const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation }) => {
     });
     heatmap.setMap(map);
 
-    // Add a marker for the suggested safe location.
     if (suggestedSafeLocation) {
       new window.google.maps.Marker({
         position: {

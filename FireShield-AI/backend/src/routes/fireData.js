@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// Sample endpoint to simulate fetching fire data (e.g., from NASA FIRMS)
 router.get('/', (req, res) => {
-  console.log("Fire data endpoint hit"); // Optional: add a log to verify the request
+  console.log("Fire data endpoint hit"); 
   res.json({
     message: 'Fire data endpoint - sample data',
     data: [

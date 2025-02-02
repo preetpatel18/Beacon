@@ -19,11 +19,10 @@ router.get('/', (req, res) => {
       const acq_datetime = parseDateTime(data.acq_date, data.acq_time);
       const lat = parseFloat(data.latitude);
       const lon = parseFloat(data.longitude);
-      // Filter for the Canadian extent (longitude: -150 to -49, latitude: 40 to 79)
       if (lon >= -150 && lon <= -49 && lat >= 40 && lat <= 79) {
         results.push({
           ...data,
-          acq_datetime: acq_datetime, // you could convert to ISO later if needed
+          acq_datetime: acq_datetime,
           latitude: lat,
           longitude: lon,
           brightness: parseFloat(data.brightness) || 0,
@@ -31,7 +30,7 @@ router.get('/', (req, res) => {
       }
     })
     .on('end', () => {
-      // Always return an array, even if it's empty.
+
       res.json({ data: results });
     })
     .on('error', (err) => {

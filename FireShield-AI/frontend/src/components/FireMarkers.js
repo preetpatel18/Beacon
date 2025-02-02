@@ -1,4 +1,4 @@
-// frontend/src/components/FireMarkers.js
+
 import React from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 
@@ -7,29 +7,26 @@ const containerStyle = {
   height: '500px'
 };
 
-// Adjust the center as needed (roughly central Canada)
 const center = {
   lat: 56.0,
   lng: -100.0,
 };
 
 const groupColors = {
-  group1: "darkred",  // fires detected within last 1 hour
-  group2: "red",      // 1 to 4 hours ago
-  group3: "orange",   // 4 to 12 hours ago
-  group4: "yellow"    // more than 12 hours ago
+  group1: "darkred",  
+  group2: "red",     
+  group3: "orange",   
+  group4: "yellow"    
 };
 
 function FireMarkers({ fireGroups }) {
-  // Load the Google Maps API
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyD7yhyKbAtYlE_1GLPyYKG4FkvqbiTKlPY", // Replace with your actual API key
+    googleMapsApiKey: "AIzaSyD7yhyKbAtYlE_1GLPyYKG4FkvqbiTKlPY", 
     libraries: ['places']
   });
 
   if (!isLoaded) return <div>Loading map...</div>;
 
-  // Combine markers from all groups into one array with group info
   const markers = [];
   Object.keys(fireGroups).forEach((groupKey) => {
     if (Array.isArray(fireGroups[groupKey])) {
