@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation }) => {
+const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation, onMapClick }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -8,7 +8,6 @@ const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation }) => {
       console.error('Google Maps API not loaded yet.');
       return;
     }
-
     const center = userLocation
       ? { lat: userLocation.latitude, lng: userLocation.longitude }
       : { lat: 56, lng: -100 };
@@ -52,7 +51,15 @@ const FireHeatmap = ({ fireData, userLocation, suggestedSafeLocation }) => {
         icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
       });
     }
-  }, [fireData, userLocation, suggestedSafeLocation]);
+
+    if (onMapClick) {
+      map.addListener('click', (event) => {
+        const lat = event.latLng.lat();
+        const lng = event.latLng.lng();
+        onMapClick({ latitude: lat, longitude: lng });
+      });
+    }
+  }, [fireData, userLocation, suggestedSafeLocation, onMapClick]);
 
   return <div ref={mapRef} style={{ height: '500px', width: '100%' }} />;
 };

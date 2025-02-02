@@ -20,13 +20,14 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
+
 function computeDestinationPoint(lat, lon, bearing, distance) {
   const R = 6371; 
   const toRad = (value) => (value * Math.PI) / 180;
   const toDeg = (value) => (value * 180) / Math.PI;
   const φ1 = toRad(lat);
   const λ1 = toRad(lon);
-  const δ = distance / R;
+  const δ = distance / R; 
 
   const φ2 = Math.asin(
     Math.sin(φ1) * Math.cos(δ) +
@@ -59,18 +60,22 @@ function App() {
   const [customLat, setCustomLat] = useState('');
   const [customLng, setCustomLng] = useState('');
   
-  const highThreshold = 3;    
+  const highThreshold = 3;   
   const moderateThreshold = 5; 
-  const safeOffsetDistance = 3; 
-
+  const safeOffsetDistance = 3;
+  
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setAutoLocation({
+          const loc = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-          });
+          };
+          setAutoLocation(loc);
+        
+          setCustomLat(loc.latitude.toString());
+          setCustomLng(loc.longitude.toString());
         },
         (error) => {
           console.error('Error obtaining geolocation:', error);
@@ -80,6 +85,8 @@ function App() {
       console.error('Geolocation is not supported by this browser.');
     }
   }, []);
+  
+
   const fetchFireData = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/nasa-firms');
@@ -93,10 +100,9 @@ function App() {
   
   useEffect(() => {
     fetchFireData();
-    const intervalId = setInterval(fetchFireData, 300000);
+    const intervalId = setInterval(fetchFireData, 300000); 
     return () => clearInterval(intervalId);
   }, []);
-
   useEffect(() => {
     if (effectiveUserLocation && fireData.length > 0) {
       let nearestDistance = Infinity;
@@ -121,7 +127,7 @@ function App() {
         newRiskCategory = 'Moderate';
       }
       setRiskCategory(newRiskCategory);
-
+  
       if (newRiskCategory !== 'High') {
         setEmergencyAlert('');
       }
@@ -139,7 +145,6 @@ function App() {
             }
           }
         );
-
         geocoder.geocode(
           {
             location: {
@@ -155,6 +160,7 @@ function App() {
             }
           }
         );
+
         const toRad = (value) => (value * Math.PI) / 180;
         const φ1 = toRad(parseFloat(nearestFire.latitude));
         const λ1 = toRad(parseFloat(nearestFire.longitude));
@@ -179,7 +185,7 @@ function App() {
       }
     }
   }, [effectiveUserLocation, fireData]);
-
+ 
   const handleManualLocationSubmit = (e) => {
     e.preventDefault();
     const lat = parseFloat(customLat);
@@ -189,6 +195,14 @@ function App() {
     } else {
       alert('Please enter valid numbers for latitude and longitude.');
     }
+  };
+  
+
+  const handleMapClick = (coords) => {
+   
+    setManualLocation(coords);
+    setCustomLat(coords.latitude.toString());
+    setCustomLng(coords.longitude.toString());
   };
   
   useEffect(() => {
@@ -206,7 +220,8 @@ function App() {
       );
     }
   }, [autoLocation, manualLocation]);
-
+  
+  
   const handleEmergencyAlert = () => {
     const number = emergencyNumbers[0]; 
     const currentLocation =
@@ -215,9 +230,9 @@ function App() {
         ? `${effectiveUserLocation.latitude.toFixed(4)}, ${effectiveUserLocation.longitude.toFixed(4)}`
         : 'unknown');
     const message = `Emergency alert: I am in danger at ${currentLocation}. Please send help immediately to responder ${number}.`;
-
+ 
     window.location.href = `tel:${number}`;
-
+   
     setEmergencyAlert(`Attempting to call responder ${number} with message: "${message}"`);
     setTimeout(() => {
       setEmergencyAlert('');
@@ -238,7 +253,7 @@ function App() {
       ) : (
         <p>Obtaining your location...</p>
       )}
-  
+
       {riskCategory === 'High' && (
         <div style={{ backgroundColor: '#b71c1c', color: 'white', padding: '10px', marginBottom: '10px' }}>
           <strong>High Risk:</strong> You are extremely close to an active fire zone{' '}
@@ -315,7 +330,8 @@ function App() {
         </form>
         {manualLocation && (
           <p>
-            Manual location set to: ({manualLocation.latitude.toFixed(4)}, {manualLocation.longitude.toFixed(4)})
+            Manual location set to: ({manualLocation.latitude.toFixed(4)},{' '}
+            {manualLocation.longitude.toFixed(4)})
           </p>
         )}
       </div>
@@ -328,6 +344,7 @@ function App() {
           fireData={fireData}
           userLocation={effectiveUserLocation}
           suggestedSafeLocation={suggestedSafeLocation}
+          onMapClick={handleMapClick}
         />
       </LoadScript>
     </div>
