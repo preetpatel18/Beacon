@@ -52,10 +52,11 @@ To get started with the project, ensure you have Node.js installed, and then run
 
 ```bash
 # Install frontend dependencies
-cd client
+cd frontend
 npm install
 
 # Install backend dependencies
+cd backend
 npm install
 
 # Configure environment variables
